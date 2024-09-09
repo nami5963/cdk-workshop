@@ -3,6 +3,7 @@ import { Code, Function, Runtime } from 'aws-cdk-lib/aws-lambda';
 import { Construct } from 'constructs';
 import { LambdaRestApi } from 'aws-cdk-lib/aws-apigateway';
 import { HitCounter } from './hitcounter';
+import { TableViewer } from 'cdk-dynamo-table-viewer';
 
 export class CdkWorkshopStack extends Stack {
 	constructor(scope: Construct, id: string, props?: StackProps) {
@@ -22,6 +23,11 @@ export class CdkWorkshopStack extends Stack {
 		// API Gateway
 		new LambdaRestApi(this, 'Endpoint', {
 			handler: helloWithCounter.handler,
+		});
+
+		const tv = new TableViewer(this, 'ViewHitCounter', {
+			title: 'Hello Hits',
+			table: helloWithCounter.table,
 		});
 	}
 }
